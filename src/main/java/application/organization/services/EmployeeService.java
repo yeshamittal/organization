@@ -1,17 +1,23 @@
 package application.organization.services;
 
+import application.organization.entities.Department;
 import application.organization.entities.Employee;
+import application.organization.repositories.EmployeeDepartmentRepository;
 import application.organization.repositories.EmployeeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 @Service
 public class EmployeeService {
     @Autowired
     private EmployeeRepository employeeRepository;
+
+    @Autowired
+    private EmployeeDepartmentRepository employeeDepartmentRepository;
 
     public List<Employee> getAllEmployees() {
         return employeeRepository.findAll();
@@ -22,6 +28,8 @@ public class EmployeeService {
     }
 
     public Employee createEmployee(Employee employee) {
+//        validateDepartments();
+        employeeDepartmentRepository.save(employee);
         return employeeRepository.save(employee);
     }
 
