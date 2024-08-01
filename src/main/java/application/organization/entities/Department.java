@@ -2,37 +2,30 @@ package application.organization.entities;
 
 import jakarta.persistence.*;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 
 @Entity
 @Table(name = "DEPARTMENTS")
 @Getter
 @Setter
+@NoArgsConstructor
+@ToString(onlyExplicitlyIncluded = true)
 public class Department {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "department_seq")
-    @SequenceGenerator(name = "department_seq", sequenceName = "DEPARTMENT_ID_SEQ", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_DEPARTMENT")
+    @SequenceGenerator(name = "SEQ_DEPARTMENT", sequenceName = "SEQ_DEPARTMENT", allocationSize = 1)
     private Long id;
 
+    @ToString.Include
     @Column(nullable = false)
     private String name;
 
+    @ToString.Include
     @Column(nullable = false)
-    private Boolean read_only = false;
+    private Boolean readOnly = false;
 
     @Column(nullable = false)
     private Boolean mandatory = false;
-
-    public Department(String name) {
-        this.name = name;
-    }
-
-    protected Department() {}
-
-    @Override
-    public String toString() {
-        return String.format(
-                "Department[id=%d, name='%s', read_only='%s', mandatory='%s']",
-                id, name, read_only, mandatory);
-    }
 }

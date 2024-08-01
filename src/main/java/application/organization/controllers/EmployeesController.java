@@ -1,6 +1,8 @@
 package application.organization.controllers;
 
 import application.organization.entities.Employee;
+import application.organization.exceptions.CommonException;
+import application.organization.exceptions.NotFoundException;
 import application.organization.services.EmployeeService;
 import io.micrometer.common.util.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,73 +21,71 @@ public class EmployeesController {
     private EmployeeService employeeService;
 
     @GetMapping
-    public ResponseEntity<List<Employee>> getAllEmployees() {
+    public List<Employee> getAllEmployees() {
         try{
-            List<Employee> allEmployees = employeeService.getAllEmployees();
-            return ResponseEntity.ok(allEmployees);
+            return employeeService.getAllEmployees();
         }catch (Exception e){
-            // return ResponseEntity.badRequest().body(new ArrayList<>());
-            return ResponseEntity.badRequest().build();
+            throw new CommonException(e.getMessage());
         }
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Employee> getEmployeeById(@PathVariable Long id) {
+    public Employee getEmployeeById(@PathVariable Long id) {
         try{
             if(Objects.isNull(id)){
-                return ResponseEntity.badRequest().build();
+                throw new IllegalArgumentException("id is null");
             }
             Optional<Employee> employee = employeeService.getEmployeeById(id);
-            return employee.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+            if(employee.isPresent()){
+                return employee.get();
+            }
+            else{
+                throw new NotFoundException("Employee not found");
+            }
+        }catch (NotFoundException e){
+            throw new NotFoundException(e.getMessage());
         }catch (Exception e){
-            return ResponseEntity.badRequest().build();
+            throw new CommonException(e.getMessage());
         }
     }
 
     @PostMapping
-    public ResponseEntity<String> createEmployee(@RequestBody Employee employee) {
-        System.out.println("=========================");
-        System.out.println(employee.toString());
-        System.out.println("=========================");
+    public Employee createEmployee(@RequestBody Employee employee) {
         try {
-            if(StringUtils.isEmpty(employee.getFirst_name())){
-                return ResponseEntity.badRequest().body("First name cannot be empty");
+            if(Objects.isNull(employee)){
+                throw new IllegalArgumentException("Input is null");
             }
-            if(StringUtils.isEmpty(employee.getLast_name())){
-                return ResponseEntity.badRequest().body("Last name cannot be empty");
-            }
-            employeeService.createEmployee(employee);
-            return ResponseEntity.status(HttpStatus.CREATED).body("Employee created successfully");
+            return employeeService.createEmployee(employee);
         }catch (Exception e){
-            return ResponseEntity.badRequest().build();
+            throw new CommonException(e.getMessage());
         }
-
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Employee> updateEmployee(@PathVariable Long id, @RequestBody Employee employee) {
+    public Employee updateEmployee(@PathVariable Long id, @RequestBody Employee employee) {
         try{
             if(Objects.isNull(id) || Objects.isNull(employee)){
-                return ResponseEntity.badRequest().build();
+                throw new IllegalArgumentException("Null values not allowed");
             }
-            Employee updatedEmployee = employeeService.updateEmployee(id, employee);
-            return ResponseEntity.ok(updatedEmployee);
+            return employeeService.updateEmployee(id, employee);
+        }catch (NotFoundException e){
+            throw new NotFoundException("No such employee exists");
         }catch (Exception e){
-            return ResponseEntity.badRequest().build();
+            throw new CommonException(e.getMessage());
         }
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteEmployee(@PathVariable Long id) {
+    public void deleteEmployee(@PathVariable Long id) {
         try {
             if (Objects.isNull(id)) {
-                return ResponseEntity.badRequest().build();
+                throw new IllegalArgumentException("Id is null");
             }
             employeeService.deleteEmployee(id);
-            return ResponseEntity.noContent().build();
+        }catch (NotFoundException e){
+            throw new NotFoundException("No such employee exists");
         }catch (Exception e){
-            return ResponseEntity.badRequest().build();
+            throw new CommonException(e.getMessage());
         }
-
     }
 }
