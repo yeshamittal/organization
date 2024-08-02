@@ -4,10 +4,7 @@ import application.organization.entities.Employee;
 import application.organization.exceptions.CommonException;
 import application.organization.exceptions.NotFoundException;
 import application.organization.services.EmployeeService;
-import io.micrometer.common.util.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -69,7 +66,7 @@ public class EmployeesController {
             }
             return employeeService.updateEmployee(id, employee);
         }catch (NotFoundException e){
-            throw new NotFoundException("No such employee exists");
+            throw new NotFoundException(e.getMessage());
         }catch (Exception e){
             throw new CommonException(e.getMessage());
         }
@@ -83,7 +80,7 @@ public class EmployeesController {
             }
             employeeService.deleteEmployee(id);
         }catch (NotFoundException e){
-            throw new NotFoundException("No such employee exists");
+            throw new NotFoundException(e.getMessage());
         }catch (Exception e){
             throw new CommonException(e.getMessage());
         }

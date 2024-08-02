@@ -1,8 +1,9 @@
 package application.organization.services;
 
+import application.organization.entities.Department;
 import application.organization.entities.Employee;
 import application.organization.exceptions.NotFoundException;
-import application.organization.repositories.MapEmployeeDepartmentRepository;
+import application.organization.repositories.DepartmentRepository;
 import application.organization.repositories.EmployeeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,7 +17,7 @@ public class EmployeeService {
     private EmployeeRepository employeeRepository;
 
     @Autowired
-    private MapEmployeeDepartmentRepository mapEmployeeDepartmentRepository;
+    private DepartmentRepository departmentRepository;
 
     public List<Employee> getAllEmployees() {
         return employeeRepository.findAll();
@@ -27,7 +28,8 @@ public class EmployeeService {
     }
 
     public Employee createEmployee(Employee employee) {
-        mapEmployeeDepartmentRepository.save(employee);
+        List<Department> departments = departmentRepository.findDepartmentsByReadOnlyTrue();
+        employee.getDepartments().addAll(departments);
         return employeeRepository.save(employee);
     }
 
@@ -35,7 +37,6 @@ public class EmployeeService {
         if (!employeeRepository.existsById(employee.getId())) {
             throw new NotFoundException("Employee not found with ID: " + employee.getId());
         }
-        employee.setId(employee.getId());
         return employeeRepository.save(employee);
     }
 

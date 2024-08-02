@@ -1,9 +1,9 @@
-INSERT INTO EMPLOYEES (FIRST_NAME,
-                    LAST_NAME)
+INSERT INTO EMPLOYEES (NAME_FIRST,
+                       NAME_LAST)
 VALUES('Djokovic', 'Serbia');
 
-INSERT INTO EMPLOYEES (FIRST_NAME,
-                       LAST_NAME)
+INSERT INTO EMPLOYEES (NAME_FIRST,
+                       NAME_LAST)
 VALUES('Monfils', 'France');
 
 

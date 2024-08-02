@@ -1,9 +1,6 @@
 package application.organization.handlers;
 
-import application.organization.exceptions.BadRequestException;
-import application.organization.exceptions.CommonException;
-import application.organization.exceptions.ErrorResponse;
-import application.organization.exceptions.NotFoundException;
+import application.organization.exceptions.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -37,5 +34,14 @@ public class GlobalExceptionHandler {
                 HttpStatus.BAD_GATEWAY.value()
         );
         return new ResponseEntity<>(errorResponse, HttpStatus.BAD_GATEWAY);
+    }
+
+    @ExceptionHandler(InvalidActionException.class)
+    public ResponseEntity<ErrorResponse> handleInvalidActionException(InvalidActionException ex) {
+        ErrorResponse errorResponse = new ErrorResponse(
+                ex.getMessage(),
+                HttpStatus.BAD_REQUEST.value()
+        );
+        return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
     }
 }

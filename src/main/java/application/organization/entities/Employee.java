@@ -22,11 +22,11 @@ public class Employee {
 
     @ToString.Include
     @Column(nullable = false)
-    private String firstName;
+    private String nameFirst;
 
     @ToString.Include
     @Column(nullable = false)
-    private String lastName;
+    private String nameLast;
 
     @ToString.Include
     @ManyToMany
