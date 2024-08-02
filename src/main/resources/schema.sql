@@ -25,5 +25,4 @@ CREATE TABLE MAP_EMPLOYEE_DEPARTMENTS (
                                      FOREIGN KEY (ID_EMPLOYEE) REFERENCES EMPLOYEES(ID),
                                      FOREIGN KEY (ID_DEPARTMENT) REFERENCES DEPARTMENTS(ID)
                                   );
--- EMPLOYEE_ID_SEQ
 
