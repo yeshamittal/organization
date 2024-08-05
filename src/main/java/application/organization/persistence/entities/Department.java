@@ -1,4 +1,4 @@
-package application.organization.entities;
+package application.organization.persistence.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;

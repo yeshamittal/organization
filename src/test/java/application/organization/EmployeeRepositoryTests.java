@@ -1,8 +1,8 @@
 package application.organization;
 
-import application.organization.entities.Department;
-import application.organization.entities.Employee;
-import application.organization.repositories.EmployeeRepository;
+import application.organization.persistence.entities.Department;
+import application.organization.persistence.entities.Employee;
+import application.organization.persistence.repositories.EmployeeRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 

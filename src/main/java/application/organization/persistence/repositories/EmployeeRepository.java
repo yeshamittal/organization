@@ -1,6 +1,6 @@
-package application.organization.repositories;
+package application.organization.persistence.repositories;
 
-import application.organization.entities.Employee;
+import application.organization.persistence.entities.Employee;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
