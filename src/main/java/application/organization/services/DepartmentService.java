@@ -1,10 +1,11 @@
 package application.organization.services;
 
-import application.organization.persistence.entities.Department;
-import application.organization.persistence.entities.Employee;
+import application.organization.persistence.Department;
+import application.organization.persistence.Employee;
 import application.organization.exceptions.InvalidActionException;
 import application.organization.exceptions.NotFoundException;
-import application.organization.persistence.repositories.DepartmentRepository;
+import application.organization.persistence.DepartmentRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -12,9 +13,9 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
+@RequiredArgsConstructor
 public class DepartmentService implements CommonManagementService<Department> {
-    @Autowired
-    private DepartmentRepository departmentRepository;
+    private final DepartmentRepository departmentRepository;
 
     @Override
     public List<Department> getAll() {
@@ -23,13 +24,7 @@ public class DepartmentService implements CommonManagementService<Department> {
 
     @Override
     public Department getById(Long id) {
-        Optional<Department> department = departmentRepository.findById(id);
-        if(department.isPresent()){
-            return department.get();
-        }
-        else{
-            throw new NotFoundException("Department not found");
-        }
+        return departmentRepository.findById(id).orElseThrow(() -> new NotFoundException("Department not found"));
     }
 
     @Override

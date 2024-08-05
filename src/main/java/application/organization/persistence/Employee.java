@@ -1,6 +1,7 @@
-package application.organization.persistence.entities;
+package application.organization.persistence;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -21,10 +22,12 @@ public class Employee {
     private Long id;
 
     @ToString.Include
+    @NotNull(message = "First name cannot be null")
     @Column(nullable = false)
     private String nameFirst;
 
     @ToString.Include
+    @NotNull(message = "Last name cannot be null")
     @Column(nullable = false)
     private String nameLast;
 

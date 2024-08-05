@@ -1,7 +1,8 @@
-package application.organization.persistence.entities;
+package application.organization.persistence;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -23,6 +24,7 @@ public class Department {
     private Long id;
 
     @ToString.Include
+    @NotNull(message = "Name cannot be null")
     @Column(nullable = false)
     private String name;
 

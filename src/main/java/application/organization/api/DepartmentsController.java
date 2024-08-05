@@ -1,18 +1,23 @@
 package application.organization.api;
 
-import application.organization.persistence.entities.Department;
+import application.organization.persistence.Department;
 import application.organization.services.CommonManagementService;
-import org.springframework.beans.factory.annotation.Autowired;
+import jakarta.validation.Valid;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Objects;
 
 @RestController
+@Validated
 @RequestMapping("/departments")
 public class DepartmentsController {
-    @Autowired
-    private CommonManagementService<Department> departmentService;
+    private final CommonManagementService<Department> departmentService;
+
+    public DepartmentsController(CommonManagementService<Department> commonManagementService) {
+        this.departmentService = commonManagementService;
+    }
 
     @GetMapping
     public List<Department> getAllDepartments() {
@@ -21,33 +26,21 @@ public class DepartmentsController {
 
     @GetMapping("/{id}")
     public Department getDepartmentById(@PathVariable Long id) {
-        if(Objects.isNull(id)){
-            throw new IllegalArgumentException("Id is null");
-        }
         return departmentService.getById(id);
     }
 
     @PostMapping
-    public Department createDepartment(@RequestBody Department department) {
-        if(Objects.isNull(department)){
-            throw new IllegalArgumentException("Input is null");
-        }
+    public Department createDepartment(@Valid @RequestBody Department department) {
         return departmentService.create(department);
     }
 
-    @PutMapping("/{id}")
-    public Department updateDepartment(@PathVariable Long id, @RequestBody Department department) {
-        if(Objects.isNull(id) || Objects.isNull(department)){
-            throw new IllegalArgumentException("Null values not allowed");
-        }
+    @PutMapping
+    public Department updateDepartment(@Valid @RequestBody Department department) {
         return departmentService.update(department);
     }
 
     @DeleteMapping("/{id}")
     public void deleteDepartment(@PathVariable Long id) {
-        if (Objects.isNull(id)) {
-            throw new IllegalArgumentException("Id is null");
-        }
         departmentService.delete(id);
     }
 }

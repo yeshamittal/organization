@@ -6,42 +6,28 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
+import java.util.HashMap;
+import java.util.Map;
+
 @ControllerAdvice
 public class GlobalExceptionHandler {
+    private static final Map<Class<? extends Exception>, HttpStatus> errors = new HashMap<>();
 
-    @ExceptionHandler(BadRequestException.class)
-    public ResponseEntity<ErrorResponse> handleBadRequestException(BadRequestException ex) {
-        ErrorResponse errorResponse = new ErrorResponse(
-                ex.getMessage(),
-                HttpStatus.BAD_REQUEST.value()
-        );
-        return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
+    static {
+        errors.put(BadRequestException.class, HttpStatus.BAD_REQUEST);
+        errors.put(NotFoundException.class, HttpStatus.NOT_FOUND);
+        errors.put(CommonException.class, HttpStatus.INTERNAL_SERVER_ERROR);
+        errors.put(IllegalArgumentException.class, HttpStatus.BAD_REQUEST);
     }
 
-    @ExceptionHandler(NotFoundException.class)
-    public ResponseEntity<ErrorResponse> handleNotFoundException(NotFoundException ex) {
-        ErrorResponse errorResponse = new ErrorResponse(
-                ex.getMessage(),
-                HttpStatus.NOT_FOUND.value()
-        );
-        return new ResponseEntity<>(errorResponse, HttpStatus.NOT_FOUND);
-    }
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<ErrorResponse> handleException(Exception exception) {
+       HttpStatus status = errors.get(exception.getClass());
 
-    @ExceptionHandler(CommonException.class)
-    public ResponseEntity<ErrorResponse> handleCommonException(CommonException ex) {
         ErrorResponse errorResponse = new ErrorResponse(
-                ex.getMessage(),
-                HttpStatus.BAD_GATEWAY.value()
+                exception.getMessage(),
+                status.value()
         );
-        return new ResponseEntity<>(errorResponse, HttpStatus.BAD_GATEWAY);
-    }
-
-    @ExceptionHandler(InvalidActionException.class)
-    public ResponseEntity<ErrorResponse> handleInvalidActionException(InvalidActionException ex) {
-        ErrorResponse errorResponse = new ErrorResponse(
-                ex.getMessage(),
-                HttpStatus.BAD_REQUEST.value()
-        );
-        return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(errorResponse, status);
     }
 }

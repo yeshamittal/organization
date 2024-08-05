@@ -1,18 +1,25 @@
 package application.organization.api;
 
-import application.organization.persistence.entities.Employee;
+import application.organization.persistence.Employee;
 import application.organization.services.CommonManagementService;
-import org.springframework.beans.factory.annotation.Autowired;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
+import lombok.AllArgsConstructor;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Objects;
 
 @RestController
+@Validated
 @RequestMapping("/employees")
 public class EmployeesController {
-    @Autowired
     private CommonManagementService<Employee> employeeService;
+
+    public EmployeesController(CommonManagementService<Employee> commonManagementService) {
+        this.employeeService = commonManagementService;
+    }
 
     @GetMapping
     public List<Employee> getAllEmployees() {
@@ -21,33 +28,21 @@ public class EmployeesController {
 
     @GetMapping("/{id}")
     public Employee getEmployeeById(@PathVariable Long id) {
-        if(Objects.isNull(id)){
-            throw new IllegalArgumentException("Id is null");
-        }
         return employeeService.getById(id);
     }
 
     @PostMapping
     public Employee createEmployee(@RequestBody Employee employee) {
-        if(Objects.isNull(employee)){
-            throw new IllegalArgumentException("Input is null");
-        }
         return employeeService.create(employee);
     }
 
-    @PutMapping("/{id}")
-    public Employee updateEmployee(@PathVariable Long id, @RequestBody Employee employee) {
-        if(Objects.isNull(id) || Objects.isNull(employee)){
-            throw new IllegalArgumentException("Null values not allowed");
-        }
+    @PutMapping
+    public Employee updateEmployee(@Valid @RequestBody Employee employee) {
         return employeeService.update(employee);
     }
 
     @DeleteMapping("/{id}")
     public void deleteEmployee(@PathVariable Long id) {
-        if (Objects.isNull(id)) {
-            throw new IllegalArgumentException("Id is null");
-        }
         employeeService.delete(id);
     }
 }
