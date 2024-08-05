@@ -1,8 +1,7 @@
 package application.organization.api;
 
 import application.organization.persistence.entities.Department;
-import application.organization.services.DepartmentService;
-import lombok.RequiredArgsConstructor;
+import application.organization.services.CommonManagementService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -10,14 +9,14 @@ import java.util.List;
 import java.util.Objects;
 
 @RestController
-@RequiredArgsConstructor
 @RequestMapping("/departments")
 public class DepartmentsController {
-    private final DepartmentService departmentService;
+    @Autowired
+    private CommonManagementService<Department> departmentService;
 
     @GetMapping
     public List<Department> getAllDepartments() {
-        return departmentService.getAllDepartments();
+        return departmentService.getAll();
     }
 
     @GetMapping("/{id}")
@@ -25,7 +24,7 @@ public class DepartmentsController {
         if(Objects.isNull(id)){
             throw new IllegalArgumentException("Id is null");
         }
-        return departmentService.getDepartmentById(id);
+        return departmentService.getById(id);
     }
 
     @PostMapping
@@ -33,7 +32,7 @@ public class DepartmentsController {
         if(Objects.isNull(department)){
             throw new IllegalArgumentException("Input is null");
         }
-        return departmentService.createDepartment(department);
+        return departmentService.create(department);
     }
 
     @PutMapping("/{id}")
@@ -41,7 +40,7 @@ public class DepartmentsController {
         if(Objects.isNull(id) || Objects.isNull(department)){
             throw new IllegalArgumentException("Null values not allowed");
         }
-        return departmentService.updateDepartment(department);
+        return departmentService.update(department);
     }
 
     @DeleteMapping("/{id}")
@@ -49,6 +48,6 @@ public class DepartmentsController {
         if (Objects.isNull(id)) {
             throw new IllegalArgumentException("Id is null");
         }
-        departmentService.deleteDepartment(id);
+        departmentService.delete(id);
     }
 }

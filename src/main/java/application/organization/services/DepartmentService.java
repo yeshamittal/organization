@@ -12,15 +12,17 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class DepartmentService {
+public class DepartmentService implements CommonManagementService<Department> {
     @Autowired
     private DepartmentRepository departmentRepository;
 
-    public List<Department> getAllDepartments() {
+    @Override
+    public List<Department> getAll() {
         return departmentRepository.findAll();
     }
 
-    public Department getDepartmentById(Long id) {
+    @Override
+    public Department getById(Long id) {
         Optional<Department> department = departmentRepository.findById(id);
         if(department.isPresent()){
             return department.get();
@@ -30,11 +32,13 @@ public class DepartmentService {
         }
     }
 
-    public Department createDepartment(Department department) {
+    @Override
+    public Department create(Department department) {
         return departmentRepository.save(department);
     }
 
-    public Department updateDepartment(Department department) {
+    @Override
+    public Department update(Department department) {
         if (!departmentRepository.existsById(department.getId())) {
             throw new NotFoundException("Department not found with ID: " + department.getId());
         }
@@ -48,7 +52,7 @@ public class DepartmentService {
         return departmentRepository.save(department);
     }
 
-    public void deleteDepartment(Long id) {
+    public void delete(Long id) {
         if (!departmentRepository.existsById(id)) {
             throw new NotFoundException("Department not found with ID: " + id);
         }

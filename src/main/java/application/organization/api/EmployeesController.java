@@ -1,18 +1,18 @@
 package application.organization.api;
 
 import application.organization.persistence.entities.Employee;
-import application.organization.services.EmployeeService;
-import lombok.RequiredArgsConstructor;
+import application.organization.services.CommonManagementService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Objects;
 
 @RestController
-@RequiredArgsConstructor
 @RequestMapping("/employees")
 public class EmployeesController {
-    private final EmployeeService employeeService;
+    @Autowired
+    private CommonManagementService<Employee> employeeService;
 
     @GetMapping
     public List<Employee> getAllEmployees() {

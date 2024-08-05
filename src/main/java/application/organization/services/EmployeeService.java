@@ -12,7 +12,7 @@ import java.util.*;
 
 @Service
 @RequiredArgsConstructor
-public class EmployeeService implements IService<Employee>{
+public class EmployeeService implements CommonManagementService<Employee> {
     private final EmployeeRepository employeeRepository;
     private final DepartmentRepository departmentRepository;
 
