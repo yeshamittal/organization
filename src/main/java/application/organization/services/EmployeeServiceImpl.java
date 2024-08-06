@@ -57,6 +57,9 @@ public class EmployeeServiceImpl implements CommonManagementService<Employee> {
     }
 
     private void checkIfDepartmentsExist(Set<Department> departments){
+        if(Objects.isNull(departments)){
+            return;
+        }
         List<Long> departmentIds = departments.stream().map(Department::getId).toList();
         boolean departmentsExist = checkIfDepartmentIdsExist(departmentIds);
         if(!departmentsExist){
