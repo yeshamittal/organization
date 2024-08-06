@@ -6,15 +6,13 @@ import application.organization.exceptions.InvalidActionException;
 import application.organization.exceptions.NotFoundException;
 import application.organization.persistence.DepartmentRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
-public class DepartmentService implements CommonManagementService<Department> {
+public class DepartmentServiceImpl implements CommonManagementService<Department> {
     private final DepartmentRepository departmentRepository;
 
     @Override
