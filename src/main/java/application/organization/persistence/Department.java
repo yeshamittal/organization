@@ -29,9 +29,11 @@ public class Department {
     private String name;
 
     @Column(nullable = false)
+    @NotNull(message = "Readonly cannot be null")
     private Boolean readOnly = false;
 
     @Column(nullable = false)
+    @NotNull(message = "Mandatory cannot be null")
     private Boolean mandatory = false;
 
     @ToString.Include

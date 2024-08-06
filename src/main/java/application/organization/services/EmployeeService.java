@@ -35,6 +35,10 @@ public class EmployeeService implements CommonManagementService<Employee> {
 
     @Override
     public Employee update(Employee employee) {
+        if(employee.getId() == null) {
+            throw new NotFoundException("Id cannot be null");
+        }
+
         if (!employeeRepository.existsById(employee.getId())) {
             throw new NotFoundException("Employee not found with ID: " + employee.getId());
         }

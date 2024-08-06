@@ -32,6 +32,7 @@ public class Employee {
     private String nameLast;
 
     @ToString.Include
+    @NotNull(message = "Departments name cannot be null")
     @ManyToMany
     @JoinTable(
             name = "MAP_EMPLOYEE_DEPARTMENTS",

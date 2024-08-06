@@ -3,13 +3,10 @@ package application.organization.api;
 import application.organization.persistence.Employee;
 import application.organization.services.CommonManagementService;
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.NotNull;
-import lombok.AllArgsConstructor;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Objects;
 
 @RestController
 @Validated
@@ -32,7 +29,7 @@ public class EmployeesController {
     }
 
     @PostMapping
-    public Employee createEmployee(@RequestBody Employee employee) {
+    public Employee createEmployee(@Valid @RequestBody Employee employee) {
         return employeeService.create(employee);
     }
 

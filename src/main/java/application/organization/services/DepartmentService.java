@@ -34,15 +34,17 @@ public class DepartmentService implements CommonManagementService<Department> {
 
     @Override
     public Department update(Department department) {
+        if(department.getId() == null) {
+            throw new NotFoundException("Id cannot be null");
+        }
+
         if (!departmentRepository.existsById(department.getId())) {
             throw new NotFoundException("Department not found with ID: " + department.getId());
         }
 
         Department existingDepartment = departmentRepository.findById(department.getId()).get();
-        if(existingDepartment.getReadOnly()){
-            if(department.getReadOnly()){
-                throw new InvalidActionException("Set read-only flag to false to make any update");
-            }
+        if(existingDepartment.getReadOnly() && department.getReadOnly()){
+            throw new InvalidActionException("Set read-only flag to false to make any update");
         }
         return departmentRepository.save(department);
     }

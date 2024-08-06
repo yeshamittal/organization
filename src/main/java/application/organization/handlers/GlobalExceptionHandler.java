@@ -3,6 +3,7 @@ package application.organization.handlers;
 import application.organization.exceptions.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
@@ -18,6 +19,8 @@ public class GlobalExceptionHandler {
         errors.put(NotFoundException.class, HttpStatus.NOT_FOUND);
         errors.put(CommonException.class, HttpStatus.INTERNAL_SERVER_ERROR);
         errors.put(IllegalArgumentException.class, HttpStatus.BAD_REQUEST);
+        errors.put(InvalidActionException.class, HttpStatus.BAD_REQUEST);
+        errors.put(MethodArgumentNotValidException.class, HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(Exception.class)
